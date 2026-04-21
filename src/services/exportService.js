@@ -1,66 +1,41 @@
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
-// JSON Export
-export const exportJSON = (review) => {
-  const data = {
-    title: review.title,
-    language: review.language,
-    aiEngine: review.aiEngine,
-    score: review.score,
-    summary: review.summary,
-    issues: review.issues,
-    positives: review.positives,
-    exportedAt: new Date().toISOString(),
-  };
-
-  const blob = new Blob([JSON.stringify(data, null, 2)], {
-    type: "application/json",
-  });
+// ✅ JSON Export
+export const exportJSON = (result) => {
+  const dataStr = JSON.stringify(result, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `review-${review.title?.replace(/\s+/g, "-")}-${Date.now()}.json`;
+  a.download = `review-${Date.now()}.json`;
   a.click();
   URL.revokeObjectURL(url);
 };
 
-// PDF Export
-export const exportPDF = async (elementId, title) => {
-  const element = document.getElementById(elementId);
-  if (!element) return;
+// ✅ PDF Export
+export const exportPDF = (elementId, filename = "review") => {
+  try {
+    const doc = new jsPDF();
+    const element = document.getElementById(elementId);
 
-  const canvas = await html2canvas(element, {
-    scale: 2,
-    backgroundColor: "#0d1117",
-    useCORS: true,
-  });
+    if (!element) {
+      // ✅ Agar element nahi mila toh basic PDF banao
+      doc.setFontSize(16);
+      doc.text("AI Code Review Report", 20, 20);
+      doc.setFontSize(10);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 35);
+      doc.save(`${filename}.pdf`);
+      return;
+    }
 
-  const imgData = canvas.toDataURL("image/png");
-  const pdf = new jsPDF({
-    orientation: "portrait",
-    unit: "mm",
-    format: "a4",
-  });
-
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const pageHeight = pdf.internal.pageSize.getHeight();
-  const imgWidth = pageWidth;
-  const imgHeight = (canvas.height * pageWidth) / canvas.width;
-
-  let heightLeft = imgHeight;
-  let position = 0;
-
-  pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
-
-  // Multi-page support
-  while (heightLeft >= 0) {
-    position = heightLeft - imgHeight;
-    pdf.addPage();
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    const text = element.innerText || element.textContent || "";
+    doc.setFontSize(16);
+    doc.text("AI Code Review Report", 20, 20);
+    doc.setFontSize(10);
+    const lines = doc.splitTextToSize(text, 170);
+    doc.text(lines, 20, 35);
+    doc.save(`${filename}.pdf`);
+  } catch (err) {
+    console.error("PDF export failed:", err);
   }
-
-  pdf.save(`review-${title?.replace(/\s+/g, "-")}-${Date.now()}.pdf`);
 };
