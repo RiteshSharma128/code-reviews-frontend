@@ -424,7 +424,7 @@ export default function ChatPanel({ code, reviewResult, onClose, onApplyFix }) {
     setHistoryLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/chat", {
+      const res = await fetch(`${BASE_URL}/chat`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -436,10 +436,11 @@ export default function ChatPanel({ code, reviewResult, onClose, onApplyFix }) {
     }
   };
 
+  const BASE_URL = import.meta.env.VITE_API_URL;
   const loadChat = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/chat/${id}`, {
+      const res =await fetch(`${BASE_URL}/chat/${id}`,  {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -458,7 +459,7 @@ export default function ChatPanel({ code, reviewResult, onClose, onApplyFix }) {
     e.stopPropagation();
     try {
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/chat/${id}`, {
+     await fetch(`${BASE_URL}/chat/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -496,7 +497,7 @@ export default function ChatPanel({ code, reviewResult, onClose, onApplyFix }) {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch(`${BASE_URL}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
