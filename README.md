@@ -6,7 +6,7 @@
 
 🔗 Frontend (Local / Deploy):
 👉 http://localhost:5173
-https://code-reviews-frontend.vercel.app/
+👉https://code-reviews-frontend.vercel.app/
 
 📌 Overview
 
