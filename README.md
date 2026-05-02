@@ -4,8 +4,7 @@
 
 🌐 Live Preview
 
-🔗 Frontend (Local / Deploy):
-👉 http://localhost:5173
+🔗 Frontend ( Deploy):
 👉https://code-reviews-frontend.vercel.app/
 
 📌 Overview
