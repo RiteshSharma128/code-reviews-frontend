@@ -33,7 +33,8 @@ export default function TeamDetail() {
   }, [id]);
 
   const setupSocket = () => {
-    socketRef.current = io("http://localhost:5000");
+    const SOCKET_URL = import.meta.env.VITE_API_URL.replace("/api", "");
+    socketRef.current = io(SOCKET_URL);
     socketRef.current.emit("join-team", id);
 
     socketRef.current.on("review-completed", ({ review, userId }) => {
