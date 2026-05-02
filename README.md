@@ -4,7 +4,7 @@
 
 🌐 Live Preview
 
-🔗 Frontend ( Deploy):
+( Deploy):
 👉https://code-reviews-frontend.vercel.app/
 
 📌 Overview
